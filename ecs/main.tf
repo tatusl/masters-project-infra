@@ -23,6 +23,17 @@ data "terraform_remote_state" "account" {
   }
 }
 
+data "terraform_remote_state" "bastion" {
+  backend = "s3"
+
+  config {
+    bucket = "mp-remote-state"
+    key    = "bastion/state/${var.env}"
+    region = "eu-west-1"
+  }
+}
+
+
 module "ecs" {
   source       = "git@github.com:tatusl/masters-project-terraform-modules.git//ecs"
   name         = "${var.name}"
@@ -30,4 +41,5 @@ module "ecs" {
   vpc          = "${data.terraform_remote_state.vpc.vpc_id}"
   subnets      = ["${data.terraform_remote_state.vpc.private_subnet_ids}"]
   keypair_name = "${data.terraform_remote_state.account.account_key}"
+  allowed_hosts = ["${data.terraform_remote_state.bastion.bastion_private_ip}/32"]
 }

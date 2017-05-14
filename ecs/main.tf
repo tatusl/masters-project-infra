@@ -41,5 +41,5 @@ module "ecs" {
   vpc          = "${data.terraform_remote_state.vpc.vpc_id}"
   subnets      = ["${data.terraform_remote_state.vpc.private_subnet_ids}"]
   keypair_name = "${data.terraform_remote_state.account.account_key}"
-  allowed_hosts = ["${data.terraform_remote_state.bastion.bastion_private_ip}/32"]
+  allowed_hosts = "${data.terraform_remote_state.bastion.bastion_private_ip}/32"
 }

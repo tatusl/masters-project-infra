@@ -1,0 +1,15 @@
+[
+  {
+    "name": "grafana",
+    "image": "grafana:lates",
+    "cpu": 0,
+    "memory": 512,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 3000,
+        "hostPort": 6464 
+      }
+    ]
+  }
+]

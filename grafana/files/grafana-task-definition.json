@@ -1,7 +1,7 @@
 [
   {
-    "name": "grafana",
-    "image": "grafana:lates",
+    "name": "grafana-test",
+    "image": "grafana/grafana:latest",
     "cpu": 0,
     "memory": 512,
     "essential": true,

@@ -19,4 +19,3 @@ variable "username" {
 variable "password" {
   description = "DB password"
 }
-

@@ -22,6 +22,16 @@ data "terraform_remote_state" "ecs" {
   }
 }
 
+data "terraform_remote_state" "bastion" {
+  backend = "s3"
+
+  config {
+    bucket = "mp-remote-state"
+    key    = "bastion/state/${var.env}"
+    region = "eu-west-1"
+  }
+}
+
 data "terraform_remote_state" "dns" {
   backend = "s3"
 
@@ -47,18 +57,20 @@ module "application" {
 }
 
 module "rds" {
-  source              = "git@github.com:tatusl/masters-project-terraform-modules.git//rds"
-  name                = "${var.name}-${var.env}"
-  env                 = "${var.env}"
-  engine              = "postgresql"
-  engine_version      = "9.6.2"
-  publicly_accessible = "false"
-  username            = "${var.username}"
-  password            = "${var.password}"
-  subnets             = "${data.terraform_remote_state.vpc.private_subnet_ids}"
-  zone_id             = "${data.terraform_remote_state.dns.hosted_zone_id}"
-  vpc_id              = "${data.terraform_remote_state.vpc.vpc_id}"
-  allowed_security_
+  source                    = "git@github.com:tatusl/masters-project-terraform-modules.git//rds"
+  name                      = "${var.name}-${var.env}"
+  env                       = "${var.env}"
+  engine                    = "postgres"
+  engine_version            = "9.6.2"
+  publicly_accessible       = "false"
+  database_name             = "${var.name}"
+  username                  = "${var.username}"
+  password                  = "${var.password}"
+  subnets                   = "${data.terraform_remote_state.vpc.private_subnet_ids}"
+  zone_id                   = "${data.terraform_remote_state.dns.hosted_zone_id}"
+  vpc_id                    = "${data.terraform_remote_state.vpc.vpc_id}"
+  allowed_security_group_id = "${data.terraform_remote_state.ecs.ecs_security_group}"
+  bastion_ip                = "${data.terraform_remote_state.bastion.bastion_private_ip}"
 }
 
 resource "aws_route53_record" "app" {

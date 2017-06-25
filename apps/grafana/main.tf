@@ -54,6 +54,7 @@ module "application" {
   health_check_target = "/login"
   container_port      = 3000
   ecs_cluster         = "${data.terraform_remote_state.ecs.ecs_cluster}"
+  env_vars            = "${var.env_vars}"
 }
 
 module "rds" {

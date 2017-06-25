@@ -19,3 +19,12 @@ variable "username" {
 variable "password" {
   description = "DB password"
 }
+
+variable "env_vars" {
+  description = "Container environment variables"
+  type = "map"
+  default = {
+    GF_SERVER_ROOT_URL = "http://grafana.aws.tatusl.eu"
+    GF_ADMIN_PASSWORD = "lollero"
+  }
+}

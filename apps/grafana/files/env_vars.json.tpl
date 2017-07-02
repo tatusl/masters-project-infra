@@ -23,6 +23,6 @@
 	"value" : "${database_user}"
 },
 {
-	"name" : "GF_DATABASE_PASS",
+	"name" : "GF_DATABASE_PASSWORD",
 	"value" : "${database_pass}"
 }
